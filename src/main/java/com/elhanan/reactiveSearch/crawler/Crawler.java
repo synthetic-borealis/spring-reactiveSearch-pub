@@ -1,7 +1,7 @@
 package com.elhanan.reactiveSearch.crawler;
 
+import com.elhanan.reactiveSearch.kafka.AppKafkaSender;
 import com.elhanan.reactiveSearch.model.*;
-import com.elhanan.reactiveSearch.sqs.SqsPublisher;
 import com.elhanan.reactiveSearch.util.ElasticSearch;
 import com.elhanan.reactiveSearch.util.ReactiveHTTPClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,7 +27,7 @@ public class Crawler {
     ObjectMapper om;
 
     @Autowired
-    SqsPublisher sqsPublisher;
+    AppKafkaSender kafkaSender;
 
     @Autowired
     ElasticSearch elasticSearch;
@@ -39,7 +39,7 @@ public class Crawler {
 
     public void crawl(String crawlId, CrawlerRequest crawlerRequest) throws IOException {
         initCrawlInRedis(crawlId);
-        sqsPublisher.send(CrawlerRecord.of(crawlId, crawlerRequest));
+        kafkaSender.send(CrawlerRecord.of(crawlId, crawlerRequest));
     }
 
     public void crawlOneRecord(String crawlId, CrawlerRecord rec) throws IOException {
@@ -89,7 +89,7 @@ public class Crawler {
         logger.info(">> adding urls to queue: distance->" + distance + " amount->" + urls.size());
         for (String url : urls) {
             if (!crawlHasVisited(rec, url)) {
-                sqsPublisher.send(CrawlerRecord.of(rec).withUrl(url).withIncDistance());
+                kafkaSender.send(CrawlerRecord.of(rec).withUrl(url).withIncDistance());
             }
         }
     }

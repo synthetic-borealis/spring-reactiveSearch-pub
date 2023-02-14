@@ -1,6 +1,7 @@
 package com.elhanan.reactiveSearch.controller;
 
 import com.elhanan.reactiveSearch.crawler.Crawler;
+import com.elhanan.reactiveSearch.kafka.AppKafkaSender;
 import com.elhanan.reactiveSearch.model.CrawlStatusOut;
 import com.elhanan.reactiveSearch.model.CrawlerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import static com.elhanan.reactiveSearch.util.UUID.generateRandomID;
 
 @RestController
 public class AppController {
+    @Autowired
+    AppKafkaSender kafkaSender;
+
     @Autowired
     Crawler crawler;
 

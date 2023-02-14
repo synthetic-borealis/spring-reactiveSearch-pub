@@ -1,6 +1,6 @@
 # Reactive Web Crawler
 
-This branch contains the SQS version of the project. A version using Kafka can be found at the `kafka` branch.
+This branch contains the Kafka version of the project. A version using Kafka can be found at the main branch.
 
 ## Usage
 
